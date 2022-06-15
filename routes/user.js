@@ -8,4 +8,13 @@ router.post("/register", userControllers.register);
 router.post("/login", userControllers.logIn);
 router.get("/check", isAuth, userControllers.check);
 
+router.get(
+  "/profile/:id",
+  isAuth,
+  checkReqParamsId,
+  userControllers.getProfile
+);
+router.patch("/profile", isAuth, userControllers.updateProfile);
+router.patch("/updatePassword", isAuth, userControllers.updatePassword);
+
 module.exports = router;

@@ -2,6 +2,7 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 
 const User = require("../models/UsersModel");
+const Profile = require("../models/ProfileModel");
 
 const { appError } = require("../service/handleError");
 const generateSendJWT = require("../service/generateSendJWT");
@@ -73,13 +74,15 @@ const userControllers = {
           password: await bcrypt.hash(password, 12),
         });
       }
+      const user = newUser._id;
+      await Profile.create({ user });
 
       const resData = {
         message: "註冊成功",
         email: newUser.email,
         name: newUser.name,
         photo: newUser.photo,
-        _id: newUser._id,
+        id: newUser._id,
       };
       handleSuccess(res, 200, resData);
     } else {
@@ -142,6 +145,76 @@ const userControllers = {
       }
     */
     handleSuccess(res, 200, null, "已授權");
+  }),
+  getProfile: handleErrorAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const profile = await Profile.findOne({ user: id }).populate({
+      path: "user",
+    });
+    if (!profile) {
+      return appError(400, "查無此用戶", next);
+    }
+    handleSuccess(res, 200, profile);
+  }),
+  updateProfile: handleErrorAsync(async (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const currentUser = await decoding(token);
+    const _id = currentUser.id;
+    const { name, photo, coverImage, description } = req.body;
+    if (!name && !photo && !coverImage && !description) {
+      return appError(400, "請輸入要更新的資訊", next);
+    }
+    await User.findByIdAndUpdate(
+      _id,
+      { name, photo },
+      { returnDocument: "after" }
+    );
+    const profile = await Profile.findOneAndUpdate(
+      { user: _id },
+      { coverImage, description },
+      { returnDocument: "after" }
+    ).populate({
+      path: "user",
+    });
+    handleSuccess(res, 200, profile);
+  }),
+  updatePassword: handleErrorAsync(async (req, res, next) => {
+    /**
+      * #swagger.tags = ['Users']
+        #swagger.security = [{ "apiKeyAuth": [] }]
+         * #swagger.summary = '重設使用者密碼'
+        #swagger.parameters['body'] = {
+            in: "body",
+            type: "object",
+            required: true,
+            description: "資料格式",
+            schema: { "user": {
+                            "password": "string"
+                            } }
+            }
+      * #swagger.responses[201] = {
+          description: '更新後的個人資料',
+        }
+      * #swagger.responses[422] = {
+          description: '資料填寫錯誤',
+        }
+      }
+    */
+    const { password } = req.body;
+    if (!password) {
+      return appError(422, "欄位未填寫正確", next);
+    }
+    if (!validator.isLength(password, { min: 8 })) {
+      return appError(422, "密碼 字數太少，至少需要 8 個字", next);
+    }
+    const token = req.headers.authorization.split(" ")[1];
+    const currentUser = await decoding(token);
+    await User.findByIdAndUpdate(
+      currentUser.id,
+      { password: await bcrypt.hash(password, 12) },
+      { new: true }
+    );
+    handleSuccess(res, 200, null, "密碼重設成功!");
   }),
 };
 
