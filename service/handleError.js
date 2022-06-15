@@ -1,5 +1,6 @@
 const resErrorDev = (err, res) => {
   res.status(err.statusCode).send({
+    status: false,
     message: err.message,
     error: err,
     stack: err.stack,
@@ -9,10 +10,12 @@ const resErrorProd = (err, res) => {
   if (err.isOperational) {
     if (err.message) {
       res.status(err.statusCode).send({
+        status: false,
         message: err.message,
       });
     } else {
       res.status(err.statusCode).send({
+        status: false,
         message: err.err,
       });
     }

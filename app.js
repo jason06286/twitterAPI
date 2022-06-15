@@ -5,14 +5,14 @@ const logger = require("morgan");
 const cors = require("cors");
 
 const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
+const userRouter = require("./routes/user");
 
 const {
   appError,
   resErrorDev,
   resErrorProd,
 } = require("./service/handleError");
-const { isAuth } = require("./middleware/index");
+// const { isAuth } = require("./middleware/index");
 
 const app = express();
 
@@ -26,10 +26,9 @@ app.use(express.static(path.join(__dirname, "public")));
 require("./connections");
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/api/user", userRouter);
 
 //需過認證
-app.use(isAuth);
 
 require("./unpredictable");
 // catch 404 and forward to error handler

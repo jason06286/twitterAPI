@@ -1,7 +1,7 @@
 const path = require("path");
 const multer = require("multer");
 
-const User = require("../models/users");
+const User = require("../models/UsersModel");
 
 const handleErrorAsync = require("../service/handleErrorAsync");
 const { appError } = require("../service/handleError");
