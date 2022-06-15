@@ -29,7 +29,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
 //需過認證
-// app.use(isAuth);
+app.use(isAuth);
 
 require("./unpredictable");
 // catch 404 and forward to error handler
