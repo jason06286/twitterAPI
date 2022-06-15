@@ -6,6 +6,7 @@ const cors = require("cors");
 
 const indexRouter = require("./routes/index");
 const userRouter = require("./routes/user");
+const uploadImageRouter = require("./routes/uploadImage");
 
 const {
   appError,
@@ -27,7 +28,7 @@ require("./connections");
 
 app.use("/", indexRouter);
 app.use("/api/user", userRouter);
-
+app.use("/api/uploadImage", uploadImageRouter);
 //需過認證
 
 require("./unpredictable");

@@ -28,7 +28,6 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
 
   // 驗證token 正確性
   const decoded = await decoding(token);
-  console.log("decoded :>> ", decoded);
   const currentUser = await User.findById(decoded.id);
 
   if (!currentUser) {
@@ -37,7 +36,7 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
   next();
 });
 
-const upload = multer({
+const checkUpload = multer({
   limits: {
     fileSize: 2 * 1024 * 1024,
   },
@@ -53,5 +52,5 @@ const upload = multer({
 module.exports = {
   checkReqParamsId,
   isAuth,
-  upload,
+  checkUpload,
 };

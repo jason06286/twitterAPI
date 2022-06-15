@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 
 const User = require("../models/UsersModel");
 const Profile = require("../models/ProfileModel");
+const Follow = require("../models/FollowModel");
 
 const { appError } = require("../service/handleError");
 const generateSendJWT = require("../service/generateSendJWT");
@@ -76,6 +77,7 @@ const userControllers = {
       }
       const user = newUser._id;
       await Profile.create({ user });
+      await Follow.create({ userId: user });
 
       const resData = {
         message: "註冊成功",
