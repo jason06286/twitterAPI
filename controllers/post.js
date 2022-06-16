@@ -138,6 +138,67 @@ const postControllers = {
     });
     handleSuccess(res, 201, addPost);
   }),
+  deletePost: handleErrorAsync(async (req, res, next) => {
+    /**
+      * #swagger.tags = ['Posts']
+        #swagger.security = [{ "apiKeyAuth": [] }]
+         * #swagger.summary = '刪除單筆貼文'
+      * #swagger.responses[200] = {
+          description: '刪除單筆貼文成功',
+        }
+      * #swagger.responses[401] = {
+          description: '沒有權限',
+        }
+      }
+    */
+    const { id } = req.params;
+    await Post.deleteMany({
+      shares: id,
+    });
+    const deletePost = await Post.findByIdAndDelete(id);
+    if (!deletePost) {
+      return appError(400, "無此帖文，請輸入正確的ID", next);
+    }
+    handleSuccess(res, 200, null, "刪除單筆貼文成功!");
+  }),
+  updatePost: handleErrorAsync(async (req, res, next) => {
+    /**
+      * #swagger.tags = ['Posts']
+        #swagger.security = [{ "apiKeyAuth": [] }]
+         * #swagger.summary = '編輯單筆貼文'
+        #swagger.parameters['body'] = {
+            in: "body",
+            type: "object",
+            required: true,
+            description: "資料格式",
+            schema: { "post": {
+                            "content": "string",
+                            } }
+            }
+      * #swagger.responses[201] = {
+          description: '編輯後的貼文',
+        }
+      * #swagger.responses[422] = {
+          description: '資料填寫錯誤',
+        }
+      }
+    */
+    const { id } = req.params;
+    const { content, images } = req.body;
+    if (!content && !images?.length) {
+      return appError(400, "請輸入要更新的貼文內容或圖片", next);
+    }
+    const newPost = await Post.findByIdAndUpdate(
+      id,
+      { content, images },
+      { new: true }
+    );
+    if (!newPost) {
+      return appError(400, "無此帖文，請輸入正確的ID", next);
+    }
+
+    handleSuccess(res, 201, newPost);
+  }),
 };
 
 module.exports = postControllers;

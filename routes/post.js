@@ -11,8 +11,16 @@ router.get(
   checkReqParamsId,
   postControllers.getUserPosts
 );
+
 router.get("/post/:id", isAuth, checkReqParamsId, postControllers.getPost);
 
 router.post("/post/", isAuth, postControllers.addPost);
+router.delete(
+  "/post/:id",
+  isAuth,
+  checkReqParamsId,
+  postControllers.deletePost
+);
+router.patch("/post/:id", isAuth, checkReqParamsId, postControllers.updatePost);
 
 module.exports = router;
