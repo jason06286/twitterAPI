@@ -20,15 +20,11 @@ const postControllers = {
       }
     */
     const timeSort = req.query.timeSort === "asc" ? "createdAt" : "-createdAt";
-    const q =
-      req.query.q !== undefined ? { content: new RegExp(req.query.q) } : {};
-    const posts = await Post.find(q)
+
+    const posts = await Post.find({ share: { $exists: false } })
       .populate({
         path: "user",
         select: "name photo ",
-      })
-      .populate({
-        path: "shares",
       })
       .sort(timeSort);
 
@@ -59,7 +55,7 @@ const postControllers = {
         select: "name photo ",
       })
       .populate({
-        path: "shares",
+        path: "share",
       })
       .sort(timeSort);
 
@@ -198,6 +194,43 @@ const postControllers = {
     }
 
     handleSuccess(res, 201, newPost);
+  }),
+  sharePost: handleErrorAsync(async (req, res, next) => {
+    /**
+      * #swagger.tags = ['Posts']
+        #swagger.security = [{ "apiKeyAuth": [] }]
+         * #swagger.summary = '新增貼文'
+        #swagger.parameters['body'] = {
+            in: "body",
+            type: "object",
+            required: true,
+            description: "資料格式",
+            schema: { "post": {
+                            "user": "userId",
+                            "content": "string"
+                            } }
+            }
+      * #swagger.responses[201] = {
+          description: '新增的貼文',
+        }
+      * #swagger.responses[422] = {
+          description: '資料填寫錯誤',
+        }
+      }
+    */
+
+    const { id } = req.params;
+    const currentUser = await decoding(req);
+    const post = await Post.findById(id);
+    if (!post) {
+      return appError(400, "無此貼文，請輸入正確的貼文ID", next);
+    }
+    const sharePost = await Post.create({
+      user: currentUser.id,
+      share: id,
+    });
+    console.log("sharePost :>> ", sharePost);
+    handleSuccess(res, 201, null, "分享貼文成功!");
   }),
 };
 

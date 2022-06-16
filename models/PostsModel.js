@@ -40,9 +40,9 @@ const PostSchema = new mongoose.Schema(
       ],
       default: [],
     },
-    shares: {
+    share: {
       type: mongoose.Schema.ObjectId,
-      ref: "post",
+      ref: "Post",
     },
   },
   {

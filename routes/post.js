@@ -22,5 +22,11 @@ router.delete(
   postControllers.deletePost
 );
 router.patch("/post/:id", isAuth, checkReqParamsId, postControllers.updatePost);
+router.post(
+  "/post/share/:id",
+  isAuth,
+  checkReqParamsId,
+  postControllers.sharePost
+);
 
 module.exports = router;
