@@ -86,7 +86,7 @@ const postControllers = {
         select: "name photo ",
       })
       .populate({
-        path: "shares",
+        path: "share",
       });
 
     if (!post) {
@@ -149,7 +149,7 @@ const postControllers = {
     */
     const { id } = req.params;
     await Post.deleteMany({
-      shares: id,
+      share: id,
     });
     const deletePost = await Post.findByIdAndDelete(id);
     if (!deletePost) {
