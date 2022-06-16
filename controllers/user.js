@@ -146,7 +146,14 @@ const userControllers = {
         }
       }
     */
-    handleSuccess(res, 200, null, "已授權");
+    const currentUser = await decoding(req);
+    const profile = await Profile.findOne({ user: currentUser.id }).populate({
+      path: "user",
+    });
+    if (!profile) {
+      return appError(400, "查無此用戶", next);
+    }
+    handleSuccess(res, 200, profile);
   }),
   getProfile: handleErrorAsync(async (req, res, next) => {
     const { id } = req.params;
