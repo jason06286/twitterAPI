@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 
-const decoding = (token) => {
+const decoding = (req) => {
+  const token = req.headers.authorization.split(" ")[1];
   return new Promise((resolve, reject) => {
     jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
       if (err) {

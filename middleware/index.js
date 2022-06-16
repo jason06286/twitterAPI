@@ -17,17 +17,15 @@ const checkReqParamsId = async (req, res, next) => {
 };
 
 const isAuth = handleErrorAsync(async (req, res, next) => {
-  let token;
   if (!req.headers.authorization) {
     return appError(401, "未帶入token", next);
   }
   if (!req.headers.authorization.startsWith("Bearer")) {
     return appError(401, "格式錯誤", next);
   }
-  token = req.headers.authorization.split(" ")[1];
 
   // 驗證token 正確性
-  const decoded = await decoding(token);
+  const decoded = await decoding(req);
   const currentUser = await User.findById(decoded.id);
 
   if (!currentUser) {

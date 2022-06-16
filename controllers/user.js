@@ -159,8 +159,7 @@ const userControllers = {
     handleSuccess(res, 200, profile);
   }),
   updateProfile: handleErrorAsync(async (req, res, next) => {
-    const token = req.headers.authorization.split(" ")[1];
-    const currentUser = await decoding(token);
+    const currentUser = await decoding(req);
     const _id = currentUser.id;
     const { name, photo, coverImage, description } = req.body;
     if (!name && !photo && !coverImage && !description) {
@@ -209,8 +208,7 @@ const userControllers = {
     if (!validator.isLength(password, { min: 8 })) {
       return appError(422, "密碼 字數太少，至少需要 8 個字", next);
     }
-    const token = req.headers.authorization.split(" ")[1];
-    const currentUser = await decoding(token);
+    const currentUser = await decoding(req);
     await User.findByIdAndUpdate(
       currentUser.id,
       { password: await bcrypt.hash(password, 12) },

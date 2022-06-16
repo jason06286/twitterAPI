@@ -6,6 +6,7 @@ const cors = require("cors");
 
 const indexRouter = require("./routes/index");
 const userRouter = require("./routes/user");
+const postRouter = require("./routes/post");
 const uploadImageRouter = require("./routes/uploadImage");
 
 const {
@@ -28,6 +29,7 @@ require("./connections");
 
 app.use("/", indexRouter);
 app.use("/api/user", userRouter);
+app.use("/api", postRouter);
 app.use("/api/uploadImage", uploadImageRouter);
 //需過認證
 
