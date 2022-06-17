@@ -284,27 +284,23 @@ const postControllers = {
     const { id } = req.params;
     const currentUser = await decoding(req);
     const post = await Post.findById(id);
-    let newPost;
+    let method = "";
+
     if (!post) {
       return appError(400, "無此貼文，請輸入正確的貼文ID", next);
     }
-    if (post.likes.indexOf(currentUser.id) === -1) {
-      newPost = await Post.findByIdAndUpdate(
-        id,
-        { $push: { likes: currentUser.id } },
-        { new: true }
-      ).populate({
-        path: "likes",
-      });
+    if (post.likes.includes(currentUser.id)) {
+      method = "$pull";
     } else {
-      newPost = await Post.findByIdAndUpdate(
-        id,
-        { $pull: { likes: currentUser.id } },
-        { new: true }
-      ).populate({
-        path: "likes",
-      });
+      method = "$push";
     }
+    const newPost = await Post.findByIdAndUpdate(
+      id,
+      { [method]: { likes: currentUser.id } },
+      { new: true }
+    ).populate({
+      path: "likes",
+    });
     handleSuccess(res, 201, newPost);
   }),
 };

@@ -7,6 +7,7 @@ const cors = require("cors");
 const indexRouter = require("./routes/index");
 const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
+const followRouter = require("./routes/follow");
 const uploadImageRouter = require("./routes/uploadImage");
 
 const {
@@ -30,8 +31,8 @@ require("./connections");
 app.use("/", indexRouter);
 app.use("/api/user", userRouter);
 app.use("/api", postRouter);
+app.use("/api/follow", followRouter);
 app.use("/api/uploadImage", uploadImageRouter);
-//需過認證
 
 require("./unpredictable");
 // catch 404 and forward to error handler

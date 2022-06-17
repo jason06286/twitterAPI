@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+
 const postControllers = require("../controllers/post");
 
 const { isAuth, checkReqParamsId } = require("../middleware/index");
