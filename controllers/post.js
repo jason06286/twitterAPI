@@ -95,6 +95,31 @@ const postControllers = {
 
     handleSuccess(res, 200, post);
   }),
+  getPostLikes: handleErrorAsync(async (req, res, next) => {
+    /**
+      * #swagger.tags = ['Posts']
+        #swagger.security = [{ "apiKeyAuth": [] }]
+         * #swagger.summary = '取得所有個人貼文'
+      * #swagger.responses[200] = {
+          description: '所有個人貼文',
+        }
+      * #swagger.responses[401] = {
+          description: '未授權',
+        }
+      }
+    */
+    const { id } = req.params;
+    const post = await Post.findById(id).populate({
+      path: "likes",
+    });
+
+    if (!post) {
+      return appError(400, "查無此貼文，請輸入正確ID", next);
+    }
+    const postLikes = post.likes;
+
+    handleSuccess(res, 200, postLikes);
+  }),
   addPost: handleErrorAsync(async (req, res, next) => {
     /**
       * #swagger.tags = ['Posts']
@@ -231,6 +256,56 @@ const postControllers = {
     });
     console.log("sharePost :>> ", sharePost);
     handleSuccess(res, 201, null, "分享貼文成功!");
+  }),
+  updatePostLikes: handleErrorAsync(async (req, res, next) => {
+    /**
+      * #swagger.tags = ['Posts']
+        #swagger.security = [{ "apiKeyAuth": [] }]
+         * #swagger.summary = '新增貼文'
+        #swagger.parameters['body'] = {
+            in: "body",
+            type: "object",
+            required: true,
+            description: "資料格式",
+            schema: { "post": {
+                            "user": "userId",
+                            "content": "string"
+                            } }
+            }
+      * #swagger.responses[201] = {
+          description: '新增的貼文',
+        }
+      * #swagger.responses[422] = {
+          description: '資料填寫錯誤',
+        }
+      }
+    */
+
+    const { id } = req.params;
+    const currentUser = await decoding(req);
+    const post = await Post.findById(id);
+    let newPost;
+    if (!post) {
+      return appError(400, "無此貼文，請輸入正確的貼文ID", next);
+    }
+    if (post.likes.indexOf(currentUser.id) === -1) {
+      newPost = await Post.findByIdAndUpdate(
+        id,
+        { $push: { likes: currentUser.id } },
+        { new: true }
+      ).populate({
+        path: "likes",
+      });
+    } else {
+      newPost = await Post.findByIdAndUpdate(
+        id,
+        { $pull: { likes: currentUser.id } },
+        { new: true }
+      ).populate({
+        path: "likes",
+      });
+    }
+    handleSuccess(res, 201, newPost);
   }),
 };
 

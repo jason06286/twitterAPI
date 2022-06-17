@@ -13,20 +13,34 @@ router.get(
 );
 
 router.get("/post/:id", isAuth, checkReqParamsId, postControllers.getPost);
+router.get(
+  "/post/:id/likes",
+  isAuth,
+  checkReqParamsId,
+  postControllers.getPostLikes
+);
 
 router.post("/post/", isAuth, postControllers.addPost);
+router.post(
+  "/post/share/:id",
+  isAuth,
+  checkReqParamsId,
+  postControllers.sharePost
+);
+
 router.delete(
   "/post/:id",
   isAuth,
   checkReqParamsId,
   postControllers.deletePost
 );
+
 router.patch("/post/:id", isAuth, checkReqParamsId, postControllers.updatePost);
-router.post(
-  "/post/share/:id",
+router.patch(
+  "/post/:id/likes",
   isAuth,
   checkReqParamsId,
-  postControllers.sharePost
+  postControllers.updatePostLikes
 );
 
 module.exports = router;
