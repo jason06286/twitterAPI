@@ -1,4 +1,5 @@
 const Post = require("../models/PostsModel");
+const Comment = require("../models/CommentModel");
 
 const { appError } = require("../service/handleError");
 const handleSuccess = require("../service/handleSuccess");
@@ -25,6 +26,9 @@ const postControllers = {
       .populate({
         path: "user",
         select: "name photo ",
+      })
+      .populate({
+        path: "comments",
       })
       .sort(timeSort);
 
@@ -57,6 +61,9 @@ const postControllers = {
       .populate({
         path: "share",
       })
+      .populate({
+        path: "comments",
+      })
       .sort(timeSort);
 
     console.log("posts :>> ", posts);
@@ -87,6 +94,9 @@ const postControllers = {
       })
       .populate({
         path: "share",
+      })
+      .populate({
+        path: "comments",
       });
 
     if (!post) {
@@ -119,6 +129,31 @@ const postControllers = {
     const postLikes = post.likes;
 
     handleSuccess(res, 200, postLikes);
+  }),
+  getPostComments: handleErrorAsync(async (req, res, next) => {
+    /**
+      * #swagger.tags = ['Posts']
+        #swagger.security = [{ "apiKeyAuth": [] }]
+         * #swagger.summary = '取得所有個人貼文'
+      * #swagger.responses[200] = {
+          description: '所有個人貼文',
+        }
+      * #swagger.responses[401] = {
+          description: '未授權',
+        }
+      }
+    */
+    const { id } = req.params;
+    const post = await Post.findById(id).populate({
+      path: "comments",
+    });
+
+    if (!post) {
+      return appError(400, "查無此貼文，請輸入正確ID", next);
+    }
+    const postComments = post.comments;
+
+    handleSuccess(res, 200, postComments);
   }),
   addPost: handleErrorAsync(async (req, res, next) => {
     /**
@@ -302,6 +337,49 @@ const postControllers = {
       path: "likes",
     });
     handleSuccess(res, 201, newPost);
+  }),
+  addPostComments: handleErrorAsync(async (req, res, next) => {
+    /**
+      * #swagger.tags = ['Posts']
+        #swagger.security = [{ "apiKeyAuth": [] }]
+         * #swagger.summary = '新增貼文'
+        #swagger.parameters['body'] = {
+            in: "body",
+            type: "object",
+            required: true,
+            description: "資料格式",
+            schema: { "post": {
+                            "user": "userId",
+                            "content": "string"
+                            } }
+            }
+      * #swagger.responses[201] = {
+          description: '新增的貼文',
+        }
+      * #swagger.responses[422] = {
+          description: '資料填寫錯誤',
+        }
+      }
+    */
+
+    const { id } = req.params;
+    const currentUser = await decoding(req);
+    const { content } = req.body;
+    if (!content) {
+      return appError(400, "請輸入留言內容", next);
+    }
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return appError(400, "無此貼文，請輸入正確的貼文ID", next);
+    }
+
+    const newComment = await Comment.create({
+      commenter: currentUser.id,
+      post: id,
+      content,
+    });
+    handleSuccess(res, 201, newComment);
   }),
 };
 

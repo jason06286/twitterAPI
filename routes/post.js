@@ -20,6 +20,12 @@ router.get(
   checkReqParamsId,
   postControllers.getPostLikes
 );
+router.get(
+  "/post/:id/comments",
+  isAuth,
+  checkReqParamsId,
+  postControllers.getPostComments
+);
 
 router.post("/post/", isAuth, postControllers.addPost);
 router.post(
@@ -27,6 +33,12 @@ router.post(
   isAuth,
   checkReqParamsId,
   postControllers.sharePost
+);
+router.post(
+  "/post/:id/comments",
+  isAuth,
+  checkReqParamsId,
+  postControllers.addPostComments
 );
 
 router.delete(
