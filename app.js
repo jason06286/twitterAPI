@@ -3,6 +3,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
+const createThirdPartyAuth = require("./service/thirdPartyAuth");
 
 const indexRouter = require("./routes/index");
 const userRouter = require("./routes/user");
@@ -17,6 +18,8 @@ const {
 } = require("./service/handleError");
 // const { isAuth } = require("./middleware/index");
 
+require("./connections/index");
+
 const app = express();
 
 app.use(cors());
@@ -26,7 +29,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-require("./connections");
+const thirdPartyAuth = createThirdPartyAuth(app, {
+  googleAppId: process.env.GOOGLE_CLIENT_ID,
+  googleAppSecret: process.env.GOOGLE_CLIENT_SECRET,
+  baseUrl: process.env.CLIENT_BASE_URL,
+});
+// auth.init() links in Passport middleware:
+thirdPartyAuth.init();
+// now we can specify our auth routes:
+thirdPartyAuth.registerRoutes();
 
 app.use("/", indexRouter);
 app.use("/api/user", userRouter);

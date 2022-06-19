@@ -6,7 +6,7 @@ const Profile = require("../models/ProfileModel");
 const Follow = require("../models/FollowModel");
 
 const { appError } = require("../service/handleError");
-const generateSendJWT = require("../service/generateSendJWT");
+const { generateSendJWT } = require("../service/generateJWT");
 const handleSuccess = require("../service/handleSuccess");
 const handleErrorAsync = require("../service/handleErrorAsync");
 const decoding = require("../service/decodingJWT");

@@ -17,4 +17,13 @@ const generateSendJWT = (user, statusCode, res) => {
   handleSuccess(res, statusCode, data);
 };
 
-module.exports = generateSendJWT;
+const generateUrlJWT = (user, res) => {
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_DAY,
+  });
+  res.redirect(
+    ` ${process.env.CLIENT_BASE_URL}?token=${token}&name=${user.name}&photo=${user.photo}&id=${user._id}`
+  );
+};
+
+module.exports = { generateSendJWT, generateUrlJWT };
