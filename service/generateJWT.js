@@ -22,7 +22,7 @@ const generateUrlJWT = (user, res) => {
     expiresIn: process.env.JWT_EXPIRES_DAY,
   });
   res.redirect(
-    `https://fast-tundra-64548.herokuapp.com?token=${token}&name=${user.name}&photo=${user.photo}&id=${user._id}`
+    `${process.env.CLIENT_BASE_URL}?token=${token}&name=${user.name}&photo=${user.photo}&id=${user._id}`
   );
 };
 

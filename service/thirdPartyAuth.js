@@ -15,7 +15,7 @@ module.exports = (app, options) => {
           {
             clientID: options.googleAppId,
             clientSecret: options.googleAppSecret,
-            callbackURL: `${options.baseUrl}/auth/google/callback`,
+            callbackURL: `${options.baseUrl}auth/google/callback`,
           },
           async (accessToken, refreshToken, profile, cb) => {
             try {
