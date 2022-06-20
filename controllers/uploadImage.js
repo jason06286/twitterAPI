@@ -6,25 +6,6 @@ const handleErrorAsync = require("../service/handleErrorAsync");
 
 const uploadImageControllers = {
   uploadImage: handleErrorAsync(async (req, res, next) => {
-    /**
-      * #swagger.tags = ['Upload']
-        #swagger.security = [{ "apiKeyAuth": [] }]
-         * #swagger.summary = '上傳圖片'
-        #swagger.consumes = ['multipart/form-data']  
-        #swagger.parameters['singleFile''] = {
-              in: 'formData',
-              type: 'file',
-              required: 'true',
-              description: 'Image File'
-            },
-      * #swagger.responses[200] = {
-          description: '圖片Url',
-        }
-      * #swagger.responses[400] = {
-          description: '檔案錯誤',
-        }
-      }
-    */
     const { files } = req;
     if (!files.length) {
       return appError(400, "尚未上傳檔案", next);

@@ -11,12 +11,14 @@ const postRouter = require("./routes/post");
 const followRouter = require("./routes/follow");
 const uploadImageRouter = require("./routes/uploadImage");
 
+const swaggerUI = require("swagger-ui-express");
+const swaggerFile = require("./swagger-output.json");
+
 const {
   appError,
   resErrorDev,
   resErrorProd,
 } = require("./service/handleError");
-// const { isAuth } = require("./middleware/index");
 
 require("./connections/index");
 
@@ -34,9 +36,9 @@ const thirdPartyAuth = createThirdPartyAuth(app, {
   googleAppSecret: process.env.GOOGLE_CLIENT_SECRET,
   baseUrl: process.env.CLIENT_BASE_URL,
 });
-// auth.init() links in Passport middleware:
+
 thirdPartyAuth.init();
-// now we can specify our auth routes:
+
 thirdPartyAuth.registerRoutes();
 
 app.use("/", indexRouter);
@@ -44,6 +46,8 @@ app.use("/api/user", userRouter);
 app.use("/api", postRouter);
 app.use("/api/follow", followRouter);
 app.use("/api/uploadImage", uploadImageRouter);
+
+app.use("/api-doc", swaggerUI.serve, swaggerUI.setup(swaggerFile));
 
 require("./unpredictable");
 // catch 404 and forward to error handler

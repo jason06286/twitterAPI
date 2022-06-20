@@ -6,6 +6,7 @@ const Profile = require("../models/ProfileModel");
 const Follow = require("../models/FollowModel");
 
 const { generateUrlJWT } = require("./generateJWT");
+const { setRandomFallback } = require("bcryptjs");
 
 module.exports = (app, options) => {
   return {

@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "cross-env NODE_ENV=dev nodemon ./bin/www",
-    "swagger": "node ./swagger.js"
+    "dev": "cross-env NODE_ENV=dev nodemon ./bin/www"
   },
   "engines": {
     "node": "v16.x"
@@ -28,7 +27,6 @@
     "nodemon": "^2.0.16",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
-    "swagger-autogen": "^2.5.10",
     "swagger-ui-express": "^4.4.0",
     "tslib": "^2.4.0",
     "validator": "^13.7.0"

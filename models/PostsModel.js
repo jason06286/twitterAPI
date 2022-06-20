@@ -22,24 +22,6 @@ const postSchema = new mongoose.Schema(
       type: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
       default: [],
     },
-    following: {
-      type: [
-        {
-          user: { type: mongoose.Schema.ObjectId, ref: "User" },
-          followAt: { type: Date, default: Date.now },
-        },
-      ],
-      default: [],
-    },
-    followers: {
-      type: [
-        {
-          user: { type: mongoose.Schema.ObjectId, ref: "User" },
-          followAt: { type: Date, default: Date.now },
-        },
-      ],
-      default: [],
-    },
     share: {
       type: mongoose.Schema.ObjectId,
       ref: "Post",

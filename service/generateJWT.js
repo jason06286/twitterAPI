@@ -7,11 +7,12 @@ const generateSendJWT = (user, statusCode, res) => {
     expiresIn: process.env.JWT_EXPIRES_DAY,
   });
 
-  const { email, name } = user;
+  const { name, photo, id } = user;
   const data = {
     message: "登入成功",
-    email,
     name,
+    photo,
+    id,
     token,
   };
   handleSuccess(res, statusCode, data);

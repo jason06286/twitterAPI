@@ -17,31 +17,6 @@ const userControllers = {
     handleSuccess(res, 200, { users });
   }),
   register: handleErrorAsync(async (req, res, next) => {
-    /**
-     * #swagger.tags = ['Users']
-        * #swagger.summary = '使用者註冊'
-        #swagger.parameters['body'] = {
-            in: "body",
-            type: "object",
-            required: true,
-            description: "資料格式",
-            schema: { "user": {
-                            "email": "string",
-                            "name": "string",
-                            "password": "string",
-                            "photo":"string"
-                            } }
-            }
-     * #swagger.responses[200] = {
-          description: '註冊成功',
-          
-        }
-     * #swagger.responses[422] = {
-          description: '註冊失敗',
-          
-        }
-    }
-     */
     const { name, email, password } = req.body;
     const errMessage = {};
     if (!name || !email || !password) {
@@ -92,29 +67,6 @@ const userControllers = {
     }
   }),
   logIn: handleErrorAsync(async (req, res, next) => {
-    /**
-     * #swagger.tags = ['Users']
-        * #swagger.summary = '使用者登入'
-        #swagger.parameters['body'] = {
-            in: "body",
-            type: "object",
-            required: true,
-            description: "資料格式",
-            schema: { "user": {
-                            "email": "string",
-                            "password": "string"
-                            } }
-            }
-     * #swagger.responses[200] = {
-          description: '登入成功',
-        }
-     * #swagger.responses[401] = {
-          description: '登入失敗',
-          
-        }
-    }
-     */
-
     const { email, password } = req.body;
     if (!email || !password) {
       return appError(401, "欄位未填寫正確", next);
@@ -134,18 +86,6 @@ const userControllers = {
     generateSendJWT(user, 200, res);
   }),
   check: handleErrorAsync(async (req, res, next) => {
-    /**
-      * #swagger.tags = ['Check']
-        #swagger.security = [{ "apiKeyAuth": [] }]
-         * #swagger.summary = '登入權限測試'
-      * #swagger.responses[200] = {
-          description: 'OK',
-        }
-      * #swagger.responses[401] = {
-          description: '未授權',
-        }
-      }
-    */
     const currentUser = await decoding(req);
     const profile = await Profile.findOne({ user: currentUser.id }).populate({
       path: "user",
@@ -187,27 +127,6 @@ const userControllers = {
     handleSuccess(res, 200, profile);
   }),
   updatePassword: handleErrorAsync(async (req, res, next) => {
-    /**
-      * #swagger.tags = ['Users']
-        #swagger.security = [{ "apiKeyAuth": [] }]
-         * #swagger.summary = '重設使用者密碼'
-        #swagger.parameters['body'] = {
-            in: "body",
-            type: "object",
-            required: true,
-            description: "資料格式",
-            schema: { "user": {
-                            "password": "string"
-                            } }
-            }
-      * #swagger.responses[201] = {
-          description: '更新後的個人資料',
-        }
-      * #swagger.responses[422] = {
-          description: '資料填寫錯誤',
-        }
-      }
-    */
     const { password } = req.body;
     if (!password) {
       return appError(422, "欄位未填寫正確", next);
