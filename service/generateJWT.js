@@ -1,5 +1,5 @@
-const jwt = require("jsonwebtoken");
-const handleSuccess = require("./handleSuccess");
+const jwt = require('jsonwebtoken');
+const handleSuccess = require('./handleSuccess');
 
 const generateSendJWT = (user, statusCode, res) => {
   // 產生 JWT token
@@ -9,7 +9,7 @@ const generateSendJWT = (user, statusCode, res) => {
 
   const { name, photo, id } = user;
   const data = {
-    message: "登入成功",
+    message: '登入成功',
     name,
     photo,
     id,
@@ -23,7 +23,7 @@ const generateUrlJWT = (user, res) => {
     expiresIn: process.env.JWT_EXPIRES_DAY,
   });
   res.redirect(
-    `${process.env.CLIENT_BASE_URL}?token=${token}&name=${user.name}&photo=${user.photo}&id=${user._id}`
+    `${process.env.CLIENT_BASE_URL}?token=${token}&name=${user.name}&photo=${user.photo}&id=${user._id}`,
   );
 };
 

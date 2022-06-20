@@ -1,59 +1,60 @@
-const express = require("express");
+const express = require('express');
+
 const router = express.Router();
 
-const postControllers = require("../controllers/post");
+const postControllers = require('../controllers/post');
 
-const { isAuth, checkReqParamsId } = require("../middleware/index");
+const { isAuth, checkReqParamsId } = require('../middleware/index');
 
-router.get("/posts", isAuth, postControllers.getAllPosts);
+router.get('/posts', isAuth, postControllers.getAllPosts);
 router.get(
-  "/posts/user/:id",
+  '/posts/user/:id',
   isAuth,
   checkReqParamsId,
-  postControllers.getUserPosts
+  postControllers.getUserPosts,
 );
 
-router.get("/post/:id", isAuth, checkReqParamsId, postControllers.getPost);
+router.get('/post/:id', isAuth, checkReqParamsId, postControllers.getPost);
 router.get(
-  "/post/:id/likes",
+  '/post/:id/likes',
   isAuth,
   checkReqParamsId,
-  postControllers.getPostLikes
+  postControllers.getPostLikes,
 );
 router.get(
-  "/post/:id/comments",
+  '/post/:id/comments',
   isAuth,
   checkReqParamsId,
-  postControllers.getPostComments
+  postControllers.getPostComments,
 );
 
-router.post("/post/", isAuth, postControllers.addPost);
+router.post('/post/', isAuth, postControllers.addPost);
 router.post(
-  "/post/share/:id",
+  '/post/share/:id',
   isAuth,
   checkReqParamsId,
-  postControllers.sharePost
+  postControllers.sharePost,
 );
 router.post(
-  "/post/:id/comments",
+  '/post/:id/comments',
   isAuth,
   checkReqParamsId,
-  postControllers.addPostComments
+  postControllers.addPostComments,
 );
 
 router.delete(
-  "/post/:id",
+  '/post/:id',
   isAuth,
   checkReqParamsId,
-  postControllers.deletePost
+  postControllers.deletePost,
 );
 
-router.patch("/post/:id", isAuth, checkReqParamsId, postControllers.updatePost);
+router.patch('/post/:id', isAuth, checkReqParamsId, postControllers.updatePost);
 router.patch(
-  "/post/:id/likes",
+  '/post/:id/likes',
   isAuth,
   checkReqParamsId,
-  postControllers.updatePostLikes
+  postControllers.updatePostLikes,
 );
 
 module.exports = router;

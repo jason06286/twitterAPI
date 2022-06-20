@@ -1,24 +1,25 @@
-const Follow = require("../models/FollowModel");
+/* eslint-disable consistent-return */
+const Follow = require('../models/FollowModel');
 
-const { appError } = require("../service/handleError");
-const handleSuccess = require("../service/handleSuccess");
-const handleErrorAsync = require("../service/handleErrorAsync");
-const decoding = require("../service/decodingJWT");
+const { appError } = require('../service/handleError');
+const handleSuccess = require('../service/handleSuccess');
+const handleErrorAsync = require('../service/handleErrorAsync');
+const decoding = require('../service/decodingJWT');
 
 const followControllers = {
   getFollow: handleErrorAsync(async (req, res, next) => {
     const { id } = req.params;
     const follow = await Follow.findOne({ userId: id })
       .populate({
-        path: "following",
-        populate: { path: "user" },
+        path: 'following',
+        populate: { path: 'user' },
       })
       .populate({
-        path: "follower",
-        populate: { path: "user" },
+        path: 'follower',
+        populate: { path: 'user' },
       });
     if (!follow) {
-      return appError(400, "查無此使用者，請輸入正確ID", next);
+      return appError(400, '查無此使用者，請輸入正確ID', next);
     }
 
     handleSuccess(res, 200, follow);
@@ -28,28 +29,28 @@ const followControllers = {
     const currentUser = await decoding(req);
 
     if (id === currentUser.id) {
-      return appError(400, "無法追蹤自己，請輸入正確的使用者ID", next);
+      return appError(400, '無法追蹤自己，請輸入正確的使用者ID', next);
     }
     const isFollow = await Follow.findOne({
       userId: currentUser.id,
-      "following.user": id,
+      'following.user': id,
     });
-    let method = "";
+    let method = '';
 
     if (isFollow) {
-      method = "$pull";
+      method = '$pull';
     } else {
-      method = "$push";
+      method = '$push';
     }
     const adminFollow = await Follow.findOneAndUpdate(
       { userId: currentUser.id },
       { [method]: { following: { user: id } } },
-      { new: true }
+      { new: true },
     );
     const otherFollow = await Follow.findOneAndUpdate(
       { userId: id },
       { [method]: { follower: { user: currentUser.id } } },
-      { new: true }
+      { new: true },
     );
     const follows = {
       adminFollow,

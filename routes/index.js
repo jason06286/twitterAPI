@@ -1,11 +1,11 @@
-var express = require("express");
-var router = express.Router();
-const User = require("../models/UsersModel");
+const express = require('express');
+
+const router = express.Router();
 
 /* GET home page. */
-router.get("/", async function (req, res, next) {
+router.get('/', async (req, res) => {
   res.send({
-    message: "Hello world",
+    message: 'Hello world',
   });
 });
 

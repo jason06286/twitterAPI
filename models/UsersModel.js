@@ -1,14 +1,14 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "請輸入您的暱稱"],
+      required: [true, '請輸入您的暱稱'],
     },
     email: {
       type: String,
-      required: [true, "請輸入您的 Email"],
+      required: [true, '請輸入您的 Email'],
       unique: true,
       lowercase: true,
       select: false,
@@ -19,13 +19,13 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, "請輸入密碼"],
+      required: [true, '請輸入密碼'],
       minlength: 8,
       select: false,
     },
     photo: {
       type: String,
-      default: "https://i.imgur.com/eInPDId.png",
+      default: 'https://i.imgur.com/eInPDId.png',
     },
     createdAt: {
       type: Date,
@@ -35,9 +35,9 @@ const userSchema = new mongoose.Schema(
   },
   {
     versionKey: false,
-  }
+  },
 );
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;

@@ -1,11 +1,11 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.ObjectId,
-      ref: "User",
-      required: [true, "User ID 未填寫"],
+      ref: 'User',
+      required: [true, 'User ID 未填寫'],
     },
     images: {
       type: [String],
@@ -19,27 +19,27 @@ const postSchema = new mongoose.Schema(
       default: Date.now,
     },
     likes: {
-      type: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
+      type: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
       default: [],
     },
     share: {
       type: mongoose.Schema.ObjectId,
-      ref: "Post",
+      ref: 'Post',
     },
   },
   {
     versionKey: false,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
-postSchema.virtual("comments", {
-  ref: "Comment",
-  foreignField: "post",
-  localField: "_id",
+postSchema.virtual('comments', {
+  ref: 'Comment',
+  foreignField: 'post',
+  localField: '_id',
 });
 
-const Post = mongoose.model("Post", postSchema);
+const Post = mongoose.model('Post', postSchema);
 
 module.exports = Post;

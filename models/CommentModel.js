@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const commentSchema = new mongoose.Schema(
   {
     content: {
       type: String,
-      required: [true, "留言內容為必填"],
+      required: [true, '留言內容為必填'],
     },
     createdAt: {
       type: Date,
@@ -12,33 +12,33 @@ const commentSchema = new mongoose.Schema(
     },
     commenter: {
       type: mongoose.Schema.ObjectId,
-      ref: "User",
-      require: ["true", "使用者 ID 為必填"],
+      ref: 'User',
+      require: ['true', '使用者 ID 為必填'],
     },
     post: {
       type: mongoose.Schema.ObjectId,
-      ref: "Post",
-      require: ["true", "Post ID 為必填"],
+      ref: 'Post',
+      require: ['true', 'Post ID 為必填'],
     },
   },
-  { versionKey: false }
+  { versionKey: false },
 );
 commentSchema.pre(/^find/, function (next) {
   this.populate({
-    path: "commenter",
+    path: 'commenter',
   });
   this.sort({ createdAt: -1 });
 
   next();
 });
 
-commentSchema.pre("save", function (next) {
+commentSchema.pre('save', function (next) {
   this.populate({
-    path: "commenter",
+    path: 'commenter',
   });
 
   next();
 });
-const Comment = mongoose.model("Comment", commentSchema);
+const Comment = mongoose.model('Comment', commentSchema);
 
 module.exports = Comment;

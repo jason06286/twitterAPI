@@ -1,16 +1,16 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const followSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.ObjectId,
-      ref: "User",
-      required: [true, "User ID 未填寫"],
+      ref: 'User',
+      required: [true, 'User ID 未填寫'],
     },
     following: {
       type: [
         {
-          user: { type: mongoose.Schema.ObjectId, ref: "User" },
+          user: { type: mongoose.Schema.ObjectId, ref: 'User' },
           followAt: { type: Date, default: Date.now },
         },
       ],
@@ -19,16 +19,16 @@ const followSchema = new mongoose.Schema(
     follower: {
       type: [
         {
-          user: { type: mongoose.Schema.ObjectId, ref: "User" },
+          user: { type: mongoose.Schema.ObjectId, ref: 'User' },
           followAt: { type: Date, default: Date.now },
         },
       ],
       default: [],
     },
   },
-  { versionKey: false }
+  { versionKey: false },
 );
 
-const Follow = mongoose.model("Follow", followSchema);
+const Follow = mongoose.model('Follow', followSchema);
 
 module.exports = Follow;
