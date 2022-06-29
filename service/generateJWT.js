@@ -23,7 +23,7 @@ const generateUrlJWT = (user, res) => {
     expiresIn: process.env.JWT_EXPIRES_DAY,
   });
   res.redirect(
-    `https://jason06286.github.io/twitterDemoFrontend/#/google/callback?token=${token}&name=${user.name}&photo=${user.photo}&id=${user._id}`,
+    `https://jason06286.github.io/twitterDemoFrontend/#/google/callback?token=${token}&name=${user.name}&photo=${user.photo}&id=${user._id}&isThirdPartyLogin=true`,
   );
 };
 
