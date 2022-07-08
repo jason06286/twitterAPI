@@ -11,7 +11,7 @@ const postControllers = {
   getAllPosts: handleErrorAsync(async (req, res) => {
     const timeSort = req.query.timeSort === 'asc' ? 'createdAt' : '-createdAt';
 
-    const posts = await Post.find({ share: { $exists: false } })
+    const posts = await Post.find()
       .populate({
         path: 'user',
         select: 'name photo ',
