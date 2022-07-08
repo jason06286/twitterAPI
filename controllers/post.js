@@ -17,6 +17,9 @@ const postControllers = {
         select: 'name photo ',
       })
       .populate({
+        path: 'share',
+      })
+      .populate({
         path: 'comments',
       })
       .sort(timeSort);
