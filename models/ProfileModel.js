@@ -9,6 +9,7 @@ const profileSchema = new mongoose.Schema(
     },
     coverImage: {
       type: String,
+      default: 'https://i.imgur.com/Sw9RKyS.jpg',
     },
     description: {
       type: String,
