@@ -46,10 +46,6 @@ const postControllers = {
       })
       .sort(timeSort);
 
-    if (!posts.length) {
-      return appError(400, '查無此使用者，請輸入正確ID', next);
-    }
-
     handleSuccess(res, 200, posts);
   }),
   getPost: handleErrorAsync(async (req, res, next) => {
