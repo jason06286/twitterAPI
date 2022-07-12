@@ -15,3 +15,10 @@ mongoose
   .catch((error) => {
     console.log(error);
   });
+
+mongoose.set('toJSON', {
+  virtuals: true,
+  transform: (doc, ret) => { //  ret means return value which is single document here
+    delete ret._id;
+  },
+});
