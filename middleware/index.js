@@ -35,10 +35,7 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
   next();
 });
 
-const checkUpload = multer({
-  limits: {
-    fileSize: 2 * 1024 * 1024,
-  },
+const upload = multer({
   fileFilter(req, file, cb) {
     const ext = path.extname(file.originalname).toLowerCase();
     if (ext !== '.jpg' && ext !== '.png' && ext !== '.jpg') {
@@ -47,6 +44,21 @@ const checkUpload = multer({
     cb(null, true);
   },
 }).any();
+
+const checkUpload = handleErrorAsync(async (req, res, next) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      return next(appError(400, err.message));
+    }
+    if (!req.file) {
+      return next(appError(400, '請選擇一張圖片上傳'));
+    }
+    if (req.file?.size > 2000000) {
+      return next(appError(400, '圖片檔案過大，僅限 1mb 以下檔案'));
+    }
+    next();
+  });
+});
 
 module.exports = {
   checkReqParamsId,
