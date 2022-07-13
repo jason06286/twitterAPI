@@ -35,14 +35,8 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
   next();
 });
 
-const checkUpload = multer({
-  limits: {
-    fileSize: 2 * 1024 * 1024,
-  },
+const upload = multer({
   fileFilter(req, file, cb) {
-    if (req.file?.size > 2000000) {
-      cb(new Error('圖片檔案過大，僅限 2mb 以下檔案'));
-    }
     const ext = path.extname(file.originalname).toLowerCase();
     if (ext !== '.jpg' && ext !== '.png' && ext !== '.jpg') {
       cb(new Error('檔案格式錯誤，僅限上傳 jpg、jpeg 與 png 格式。'));
@@ -51,6 +45,20 @@ const checkUpload = multer({
   },
 }).any();
 
+const checkUpload = handleErrorAsync(async (req, res, next) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      return appError(400, err.message, next);
+    }
+    if (!req.files) {
+      return appError(400, '請選擇一張圖片上傳', next);
+    }
+    if (req.files[0]?.size > 2000000) {
+      return appError(400, '圖片檔案過大，僅限 2mb 以下檔案', next);
+    }
+    next();
+  });
+});
 module.exports = {
   checkReqParamsId,
   isAuth,
