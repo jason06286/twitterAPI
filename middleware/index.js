@@ -54,7 +54,7 @@ const checkUpload = handleErrorAsync(async (req, res, next) => {
       return next(appError(400, '請選擇一張圖片上傳'));
     }
     if (req.file?.size > 2000000) {
-      return next(appError(400, '圖片檔案過大，僅限 1mb 以下檔案'));
+      return next(appError(400, '圖片檔案過大，僅限 2mb 以下檔案'));
     }
     next();
   });
