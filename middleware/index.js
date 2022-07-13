@@ -48,13 +48,13 @@ const upload = multer({
 const checkUpload = handleErrorAsync(async (req, res, next) => {
   upload(req, res, async (err) => {
     if (err) {
-      return next(appError(400, err.message));
+      return appError(400, err.message, next);
     }
     if (!req.file) {
-      return next(appError(400, '請選擇一張圖片上傳'));
+      return appError(400, '請選擇一張圖片上傳', next);
     }
     if (req.file?.size > 2000000) {
-      return next(appError(400, '圖片檔案過大，僅限 2mb 以下檔案'));
+      return appError(400, '圖片檔案過大，僅限 2mb 以下檔案', next);
     }
     next();
   });
