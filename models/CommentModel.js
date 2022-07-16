@@ -27,7 +27,7 @@ commentSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'commenter',
   });
-  this.sort({ createdAt: -1 });
+  this.sort({ createdAt: 1 });
 
   next();
 });
