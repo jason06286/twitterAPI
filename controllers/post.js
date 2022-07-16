@@ -85,7 +85,7 @@ const postControllers = {
     const { id } = req.params;
     const post = await Post.findById(id).populate({
       path: 'comments',
-    }).sort('createdAt');
+    }).sort('-createdAt');
 
     if (!post) {
       return appError(400, '查無此貼文，請輸入正確ID', next);
