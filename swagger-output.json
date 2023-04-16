@@ -4,7 +4,7 @@
     "title": "twitterDemo Api",
     "description": "twitterDemo 相關 Api"
   },
-  "host": "fast-tundra-64548.herokuapp.com",
+  "host": "twiiter-backend.onrender.com",
   "basePath": "/",
   "tags": [],
   "schemes": [
